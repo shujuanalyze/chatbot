@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot Demo</title>
+    <style>
+        .container {
+            width: 400px;
+            margin: 5px;
+            padding: 20px;
+        }
+
+        #chatbox {
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: scroll;
+        }
+
+        #inputbox {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #sendbtn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Chatbot Demo</h1>
+    <div id="chatbox"></div>
+    <input type="text" id="inputbox" placeholder="Type your message here">
+    <button id="sendbtn">Send</button>
+</div>
+
+<script>
+    // 获取页面元素
+    var chatbox = document.getElementById('chatbox');
+    var inputbox = document.getElementById('inputbox');
+    var sendbtn = document.getElementById('sendbtn');
+
+    // 发送消息并获取回复
+    function sendMessage() {
+        var message = inputbox.value;
+        addMessage('You: ' + message);
+        inputbox.value = '';
+
+        // 发送消息给后端服务器
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:8000/chat', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                var reply = 'Chatbot: ' + response.response;
+                addMessage(reply);
+            }
+        };
+        var data = JSON.stringify({input: message});
+        xhr.send(data);
+    }
+
+    // 在聊天框中添加消息
+    function addMessage(message) {
+        var p = document.createElement('p');
+        p.textContent = message;
+        chatbox.appendChild(p);
+    }
+
+    // 监听发送按钮的点击事件
+    sendbtn.addEventListener('click', function () {
+        sendMessage();
+    });
+
+    // 监听输入框的回车键事件
+    inputbox.addEventListener('keydown', function (event) {
+        if (event.keyCode === 13) {
+            sendMessage();
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        background-image: url('/static/image/background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    /*聊天框样式*/
+    .chat_commento{
+        width: 550px;
+        height: 550px;
+        margin: auto;
+        border-radius: 5px;
+        border: 2px solid #f4f5f7;
+        background-color: #f4f5f7;
+        position: relative;
+    }
+    .clearfix::after{
+        content: "";
+        display: block;
+        clear: both;
+        width: 0;
+        height: 0;
+        line-height: 0;
+        visibility: hidden;
+    }
+    /* top */
+    .chat_top{
+        width: 100%;
+        height: 50px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding-left: 20px;
+        font-size: 20px;
+        line-height: 50px;
+        box-sizing: border-box;
+        font-weight: 550;
+        border-width: 0;
+    }
+    /* middle */
+    /* 左边 */
+    .chat_middle{
+        width: 450px;
+        height: 455px;
+        position: relative;
+        box-sizing: border-box;
+        overflow: auto;
+        border-width: 0;
+    }
+    .chat_left{
+        width: 100%;
+        height: 120px;
+        margin-top: 20px;
+    }
+    .chat_left_item_1{
+        width: 50px;
+        height: 50px;
+        background-color: #4459AB;
+        float: left;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+        line-height: 50px;
+        color: white;
+        border-radius: 25px;
+    }
+    .chat_left_item_2{
+        width: 55%;
+        height: 100px;
+        float: left;
+        margin-top: 10px;
+    }
+    .chat_left_item_2 .chat_left_chat{
+        float: left;
+    }
+    .chat_left_item_2 .chat_left_content{
+        padding: 15px;
+        margin-top: 10px;
+        background-color: #f4f5f7;
+        display: inline-block;
+        border-radius: 10px;
+        border-top-left-radius: 0;
+    }
+    /* 右边 */
+    .chat_right{
+        width: 100%;
+        height: 120px;
+        margin-top: 20px;
+    }
+    .chat_right_item_1{
+        width: 50px;
+        height: 50px;
+        background-color: #4459AB;
+        float: right;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+        line-height: 50px;
+        color: white;
+        border-radius: 25px;
+    }
+    .chat_right_item_2{
+        width: 55%;
+        height: 100px;
+        float: right;
+        margin-top: 10px;
+    }
+    .chat_right_time{
+        width: 100%;
+        text-align: right;
+    }
+    .chat_right_content{
+        float: right;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+        border-top-right-radius: 0;
+        background-color: #4F7cff;
+        color: white;
+    }
+    /* foot */
+    .chat_foot{
+        width: 550px;
+        height: 150px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: relative;
+    }
+    .chat_context{
+        width: 100%;
+        height: 100%;
+        font-size: 17px;
+        box-sizing: border-box;
+        outline: none;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-width: 0;
+        padding: 16px;
+    }
+    .chat_commit{
+        width: 80px;
+        height: 30px;
+        color: white;
+        background-color: #4F7cff;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 5px;
+        position: absolute;
+        right: 10px;
+        bottom: 20px;
+        margin-right: 10px;
+    }
+    .chat_context{
+        resize: none;
+    }
+    .chat_context::placeholder{
+        color: black;
+        font-weight: normal;
+        text-align: left;
+    }
+    .line{
+        width: 100%;
+        border-top: 1px;
+        border-color: #f4f5f7;
+        border-style: solid;
+    }
+</style>
+<body>
+    <!-- entry -->
+    <div class="chat_commento">
+        <!-- top -->
+        <div class="chat_top">
+            聊天机器人小莫
+        </div>
+        <!-- line -->
+        <div class="line"></div>
+        <!-- middle -->
+        <div class="chat_middle" id="chat_middle_item"></div>
+        <!-- line -->
+        <div class="line"></div>
+        <!-- foot -->
+        <div class="chat_foot">
+            <!-- context -->
+            <input class="chat_context" id="chat_context_item" type="text" placeholder="请输入">
+            <div class="chat_commit" id="button">发送</div>
+        </div>
+    </div>
+     <script>
+        // 获取页面元素
+        var chat_middle_item = document.getElementById("chat_middle_item");
+        var chat_context_item = document.getElementById("chat_context_item");
+        var button = document.getElementById("button");
+
+        // 发送消息并获取回复
+        function sendMessage() {
+            var message = chat_context_item.value;
+            addMessage('用户', message);
+            chat_context_item.value = '';
+
+            // 发送消息给后端服务器
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:8000/chat', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var reply = response.response;
+                    var newreplay = reply.replace("EOS","")
+                    addMessage('小莫', newreplay);
+                }
+            };
+            var data = JSON.stringify({ message: message });
+            xhr.send(data);
+        }
+
+        // 在聊天框中添加消息
+        function addMessage(user, message) {
+            var time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: 'numeric', minute: 'numeric' });
+            var content = '<div class="chat_' + user.toLowerCase() + '_item_1 clearfix"></div>' +
+                '<div class="chat_' + user.toLowerCase() + '_item_2">' +
+                '<div class="chat_' + user.toLowerCase() + '_time clearfix">' + time + '</div>' +
+                '<div class="chat_' + user.toLowerCase() + '_content clearfix">' + message + '</div>' +
+                '</div>';
+            var messageElement = document.createElement('div');
+            messageElement.className = 'chat_' + user.toLowerCase();
+            messageElement.innerHTML = content;
+            chat_middle_item.appendChild(messageElement);
+
+            // 滚动到底部
+            chat_middle_item.scrollTop = chat_middle_item.scrollHeight;
+        }
+
+        // 监听发送按钮的点击事件
+        button.addEventListener('click', function () {
+            sendMessage();
+        });
+
+        // 监听输入框的回车键事件
+        chat_context_item.addEventListener('keydown', function (event) {
+            if (event.keyCode === 13) {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

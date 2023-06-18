@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    body {
+        background-image: url('/static/image/background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    /*聊天框样式*/
+    .chat_commento {
+        width: 450px;
+        height: 550px;
+        margin: auto;
+        border-radius: 5px;
+        border: 2px solid #f4f5f7;
+        background-color: #f4f5f7;
+        position: relative;
+    }
+
+    .clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+        width: 0;
+        height: 0;
+        line-height: 0;
+        visibility: hidden;
+    }
+
+    /* top */
+    .chat_top {
+        width: 100%;
+        height: 50px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding-left: 20px;
+        font-size: 20px;
+        line-height: 50px;
+        box-sizing: border-box;
+        font-weight: 550;
+        border-width: 0;
+    }
+
+    /* middle */
+    /* 左边 */
+    .chat_middle {
+        width: 450px;
+        height: 455px;
+        position: relative;
+        box-sizing: border-box;
+        overflow: auto;
+        border-width: 0;
+        float: left;
+    }
+
+    .chat_left {
+        width: 100%;
+        height: auto;
+        margin-top: 20px;
+        clear: both;
+    }
+
+    .chat_left_item_1 {
+        width: 50px;
+        height: 50px;
+        background-color: #4459AB;
+        float: left;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+        line-height: 50px;
+        color: white;
+        border-radius: 25px;
+    }
+
+    .chat_left_item_2 {
+        width: 55%;
+        height: auto;
+        float: left;
+        margin-top: 10px;
+    }
+
+    .chat_left_item_2 .chat_left_chat {
+        float: left;
+    }
+
+    .chat_left_item_2 .chat_left_content {
+        padding: 15px;
+        margin-top: 10px;
+        background-color: #f4f5f7;
+        display: inline-block;
+        border-radius: 10px;
+        border-top-left-radius: 0;
+    }
+
+
+    /* 右边 */
+    .chat_right {
+        width: 100%;
+        height: auto;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row-reverse; /* 修改为从右到左排列 */
+        justify-content: right;
+        position: absolute;
+        right: 20px;
+        clear: both;
+    }
+
+    /*头像*/
+    .chat_right_item_1 {
+        width: 50px;
+        height: 50px;
+        background-color: #4459AB;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 0; /* 将右侧间距设为0 */
+        text-align: center;
+        line-height: 50px;
+        color: white;
+        border-radius: 25px;
+    }
+
+    .chat_right_item_2 {
+        width: auto; /* 减去头像和间距的宽度 */
+        height: 100px;
+        margin-top: 10px;
+        margin-right: 10px; /* 调整右边距离 */
+        display: flex;
+        flex-direction: column; /* 修改为垂直方向排列 */
+        justify-content: flex-start; /* 修改为上对齐 */
+    }
+
+    .chat_right_time {
+        width: 100%;
+        text-align: right;
+    }
+
+    .chat_right_content {
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+        border-top-right-radius: 0;
+        background-color: #4F7cff;
+        color: white;
+        float: none; /* 移除 float 属性 */
+    }
+
+    /* foot */
+    .chat_foot {
+        width: 450px;
+        height: 150px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: relative;
+        float: left;
+    }
+
+    .chat_context {
+        width: 100%;
+        height: 100%;
+        font-size: 17px;
+        box-sizing: border-box;
+        outline: none;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-width: 0;
+        padding: 16px;
+    }
+
+    .chat_commit {
+        width: 80px;
+        height: 30px;
+        color: white;
+        background-color: #4F7cff;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 5px;
+        position: absolute;
+        right: 10px;
+        bottom: 20px;
+        margin-right: 10px;
+    }
+
+    .chat_context {
+        resize: none;
+    }
+
+    .chat_context::placeholder {
+        color: black;
+        font-weight: normal;
+        text-align: left;
+    }
+
+    .line {
+        width: 100%;
+        border-top: 1px;
+        border-color: #f4f5f7;
+        border-style: solid;
+    }
+</style>
+<body>
+<!-- entry -->
+<div class="chat_commento">
+    <!-- top -->
+    <div class="chat_top">
+        聊天机器人小莫
+    </div>
+    <!-- line -->
+    <div class="line"></div>
+    <!-- middle -->
+    <div class="chat_middle" id="chat_middle_item"></div>
+    <!-- line -->
+    <div class="line"></div>
+    <!-- foot -->
+    <div class="chat_foot">
+        <!-- context -->
+        <input class="chat_context" id="chat_context_item" type="text" placeholder="请输入">
+        <div class="chat_commit" id="button">发送</div>
+    </div>
+</div>
+
+<script>
+    // 获取页面元素
+    var chat_middle_item = document.getElementById("chat_middle_item");
+    var chat_context_item = document.getElementById("chat_context_item");
+    var button = document.getElementById("button");
+
+    // 发送消息并获取回复
+    function sendMessage() {
+        var message = chat_context_item.value;
+        addMessage('用户', message, '\n\n');
+        chat_context_item.value = '';
+
+        // 发送消息给后端服务器
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:8000/chat', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                var reply = response.response;
+                addMessage('机器人', reply, '\n\n');
+            }
+        };
+        var data = JSON.stringify({'message': message});
+        xhr.send(data);
+    }
+
+    // 添加消息到聊天框
+    function addMessage(sender, message) {
+        var chat_item = document.createElement("div");
+        chat_item.className = sender === '用户' ? "chat_right" : "chat_left";
+
+        var chat_item_1 = document.createElement("div");
+        chat_item_1.className = sender === '用户' ? "chat_right_item_1" : "chat_left_item_1";
+        chat_item_1.innerText = sender === '用户' ? "用户" : "机器人";
+
+        var chat_item_2 = document.createElement("div");
+        chat_item_2.className = sender === '用户' ? "chat_right_item_2" : "chat_left_item_2";
+
+        var chat_content = document.createElement("div");
+        chat_content.className = sender === '用户' ? "chat_right_content" : "chat_left_content";
+
+        // 处理换行
+        var lines = message.split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            var line = document.createElement("div");
+            line.innerText = lines[i];
+            chat_content.appendChild(line);
+        }
+
+        var chat_time = document.createElement("div");
+        chat_time.className = "chat_right_time";
+
+        chat_item_2.appendChild(chat_content);
+        chat_item_2.appendChild(chat_time);
+        chat_item.appendChild(chat_item_1);
+        chat_item.appendChild(chat_item_2);
+
+        // 获取最后一条左右消息
+        var lastLeftMessage = chat_middle_item.querySelector('.chat_left:last-child');
+        var lastRightMessage = chat_middle_item.querySelector('.chat_right:last-child');
+
+        if (sender === '用户') {
+            if (lastRightMessage) {
+                lastRightMessage.querySelector('.chat_right_item_2').appendChild(chat_item_1);
+                lastRightMessage.querySelector('.chat_right_item_2').appendChild(chat_item_2);
+            } else {
+                chat_middle_item.appendChild(chat_item);
+            }
+        } else {
+            if (lastLeftMessage) {
+                lastLeftMessage.querySelector('.chat_left_item_2').appendChild(chat_item_1);
+                lastLeftMessage.querySelector('.chat_left_item_2').appendChild(chat_item_2);
+            } else {
+                chat_middle_item.appendChild(chat_item);
+            }
+        }
+
+        chat_middle_item.scrollTop = chat_middle_item.scrollHeight;
+    }
+
+    // 点击发送按钮或按下Enter键发送消息
+    button.addEventListener('click', sendMessage);
+    chat_context_item.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+</body>
+</html>
